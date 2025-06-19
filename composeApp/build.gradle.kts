@@ -33,6 +33,10 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.core.splashscreen)
+            implementation(libs.androidx.material3)
+            implementation(libs.material)
+            implementation(libs.androidx.appcompat.v161)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

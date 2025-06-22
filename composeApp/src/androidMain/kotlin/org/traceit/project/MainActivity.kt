@@ -9,7 +9,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import org.traceit.project.ui.DomainIpInput
+import org.traceit.project.ui.FilledTextBox
 import org.traceit.project.ui.TraceItTheme
+import org.traceit.project.ui.VirtualNumberInput
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +22,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
                 TraceItTheme {
-                    App()
+                    DomainIpInput()
                 }
         }
     }
@@ -28,5 +31,5 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun AppAndroidPreview() {
-    App()
+   VirtualNumberInput()
 }

@@ -29,3 +29,8 @@ actual fun customSearchIcon(): Painter {
 actual fun domainLookupIcon(): Painter {
     return painterResource(id = R.drawable.domain_lookup)
 }
+
+@Composable
+actual fun downloadIcon(): Painter {
+    return painterResource(id = R.drawable.download_icon)
+}

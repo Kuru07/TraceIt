@@ -35,6 +35,9 @@ expect fun domainLookupIcon(): Painter
 expect fun voipLookupIcon():Painter
 
 @Composable
+expect fun downloadIcon():Painter
+
+@Composable
 fun FilledTextBox(text: String,modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
@@ -49,6 +52,26 @@ fun FilledTextBox(text: String,modifier: Modifier = Modifier) {
             modifier = Modifier.align(Alignment.Center),
             fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
             fontSize = 32.sp
+        )
+    }
+
+}
+
+@Composable
+fun FilledOutputTextBox(text: String,modifier: Modifier = Modifier) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFFFD691), shape = RoundedCornerShape(15.dp))
+            .padding(10.dp)
+    ) {
+        Text(
+            text = text,
+            color = Color(0xFF233A66),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.align(Alignment.CenterStart),
+            fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
+            fontSize = 28.sp
         )
     }
 

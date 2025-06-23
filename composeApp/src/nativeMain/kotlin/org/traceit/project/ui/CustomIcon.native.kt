@@ -27,3 +27,8 @@ actual fun customSearchIcon(): Painter {
 actual fun domainLookupIcon(): Painter {
     TODO("Not yet implemented")
 }
+
+@Composable
+actual fun downloadIcon(): Painter {
+    TODO("Not yet implemented")
+}

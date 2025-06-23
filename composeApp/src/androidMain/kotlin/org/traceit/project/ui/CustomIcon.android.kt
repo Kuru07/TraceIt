@@ -34,3 +34,8 @@ actual fun domainLookupIcon(): Painter {
 actual fun downloadIcon(): Painter {
     return painterResource(id = R.drawable.download_icon)
 }
+
+@Composable
+actual fun forwardIcon(): Painter {
+    return painterResource(id = R.drawable.forward_icon)
+}

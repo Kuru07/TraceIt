@@ -38,6 +38,9 @@ expect fun voipLookupIcon():Painter
 expect fun downloadIcon():Painter
 
 @Composable
+expect fun forwardIcon(): Painter
+
+@Composable
 fun FilledTextBox(text: String,modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier

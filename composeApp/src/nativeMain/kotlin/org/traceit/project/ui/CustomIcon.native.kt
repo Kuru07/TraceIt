@@ -32,3 +32,8 @@ actual fun domainLookupIcon(): Painter {
 actual fun downloadIcon(): Painter {
     TODO("Not yet implemented")
 }
+
+@Composable
+actual fun forwardIcon(): Painter {
+    TODO("Not yet implemented")
+}

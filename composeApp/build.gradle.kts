@@ -80,8 +80,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-
 dependencies {
-    debugImplementation(compose.uiTooling)
+    implementation(libs.androidx.room.runtime.android)
 }
+
 

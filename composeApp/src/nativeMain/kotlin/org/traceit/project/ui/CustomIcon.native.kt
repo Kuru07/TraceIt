@@ -2,6 +2,9 @@ package org.traceit.project.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 actual fun customMenuIcon(): Painter {
@@ -35,5 +38,15 @@ actual fun downloadIcon(): Painter {
 
 @Composable
 actual fun forwardIcon(): Painter {
+    TODO("Not yet implemented")
+}
+
+@Composable
+actual fun font(
+    name: String,
+    res: String,
+    weight: FontWeight,
+    style: FontStyle
+): Font {
     TODO("Not yet implemented")
 }

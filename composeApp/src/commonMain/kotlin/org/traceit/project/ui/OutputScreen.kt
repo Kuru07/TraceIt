@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -84,15 +85,16 @@ fun VirtualNumberOutput(modifier: Modifier = Modifier) {
                     Text(
                         text = "Original Number: \nValid: \nCarrier: \nLine Type: \nCountry Code:",
                         fontSize = 24.sp,
-                        lineHeight = 30.sp
-                    )
+                        lineHeight = 30.sp,
+                        fontFamily = FontFamily.Serif                    )
                     Spacer(modifier = Modifier.padding(10.dp))
                     FilledOutputTextBox("NUMBER FORMAT")
                     Spacer(modifier = Modifier.padding(6.dp))
                     Text(
                         text = "Local: \nInternational:",
                         fontSize = 24.sp,
-                        lineHeight = 30.sp
+                        lineHeight = 30.sp,
+                        fontFamily = FontFamily.Serif
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
                     FilledOutputTextBox("LOCATION DETAILS")
@@ -100,15 +102,17 @@ fun VirtualNumberOutput(modifier: Modifier = Modifier) {
                     Text(
                         text = "Country: \nRegion:",
                         fontSize = 24.sp,
-                        lineHeight = 30.sp
+                        lineHeight = 30.sp,
+                        fontFamily = FontFamily.Serif
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
-                    FilledOutputTextBox("RISK SCORE:")
+                    FilledOutputTextBox("RISK SCORE")
                     Spacer(modifier = Modifier.padding(6.dp))
                     Text(
                         text = "Fraud Score:\nEmoji:",
                         fontSize = 24.sp,
-                        lineHeight = 30.sp
+                        lineHeight = 30.sp,
+                        fontFamily = FontFamily.Serif
                     )
                     Spacer(modifier = Modifier.padding(20.dp))
                     Row(
@@ -133,7 +137,8 @@ fun VirtualNumberOutput(modifier: Modifier = Modifier) {
                         ){
                             Text(
                                 text = "SAVE REPORT  ",
-                                fontSize = 25.sp
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                             Icon(painter = downloadIcon(), contentDescription = "Download")
                         }
@@ -156,12 +161,13 @@ fun VirtualNumberOutput(modifier: Modifier = Modifier) {
                                 containerColor = Color(0xFFFFD691),
                                 contentColor = Color(0xFF233A66)
                             ),
-                            modifier = Modifier.padding(15.dp)
+                            modifier = Modifier.padding(12.dp)
                         ){
                             Text(
                                 text = "LOOKUP \nANOTHER",
                                 maxLines = 2,
-                                fontSize = 20.sp
+                                fontSize = 17.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                         }
                         Button(
@@ -171,12 +177,13 @@ fun VirtualNumberOutput(modifier: Modifier = Modifier) {
                                 containerColor = Color(0xFFFFD691),
                                 contentColor = Color(0xFF233A66)
                             ),
-                            modifier = Modifier.padding(15.dp)
+                            modifier = Modifier.padding(12.dp)
                         ){
                             Text(
                                 text = "WHOIS \nLOOKUP",
                                 maxLines = 2,
-                                fontSize = 20.sp
+                                fontSize = 17.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                         }
                     }
@@ -231,7 +238,8 @@ fun DomainIpOutput(isDomain: Boolean = true, modifier: Modifier = Modifier) {
                         Text(
                             text = "Domain Name: \nCreation Date: \nUpdate Date: \nExpiry Date:",
                             fontSize = 24.sp,
-                            lineHeight = 30.sp
+                            lineHeight = 30.sp,
+                            fontFamily = FontFamily.Serif
                         )
                         Spacer(modifier = Modifier.padding(10.dp))
                         FilledOutputTextBox("REGISTRAR DETAILS")
@@ -239,7 +247,8 @@ fun DomainIpOutput(isDomain: Boolean = true, modifier: Modifier = Modifier) {
                         Text(
                             text = "Registrar Name: \nIANA Id: \nWebsite URL: \nEmail Address: \nPhone Number:",
                             fontSize = 24.sp,
-                            lineHeight = 30.sp
+                            lineHeight = 30.sp,
+                            fontFamily = FontFamily.Serif
                         )
                         Spacer(modifier = Modifier.padding(10.dp))
                         FilledOutputTextBox("NAME SERVERS")
@@ -247,7 +256,8 @@ fun DomainIpOutput(isDomain: Boolean = true, modifier: Modifier = Modifier) {
                         Text(
                             text = "1) \n2)",
                             fontSize = 24.sp,
-                            lineHeight = 30.sp
+                            lineHeight = 30.sp,
+                            fontFamily = FontFamily.Serif
                         )
                     }
                     else
@@ -257,7 +267,8 @@ fun DomainIpOutput(isDomain: Boolean = true, modifier: Modifier = Modifier) {
                         Text(
                             text = "IP Address: \nISP Name: \nOrganization Name: ",
                             fontSize = 24.sp,
-                            lineHeight = 30.sp
+                            lineHeight = 30.sp,
+                            fontFamily = FontFamily.Serif
                         )
                         Spacer(modifier = Modifier.padding(10.dp))
                         FilledOutputTextBox("LOCATION DETAILS")
@@ -265,7 +276,8 @@ fun DomainIpOutput(isDomain: Boolean = true, modifier: Modifier = Modifier) {
                         Text(
                             text = "Country Code: \nCountry: \nRegion: \nCity: \nZIP: \nLatitude: \nLongitude: \nTime Zone:",
                             fontSize = 24.sp,
-                            lineHeight = 30.sp
+                            lineHeight = 30.sp,
+                            fontFamily = FontFamily.Serif
                         )
                     }
                     Spacer(modifier = Modifier.padding(20.dp))
@@ -291,7 +303,8 @@ fun DomainIpOutput(isDomain: Boolean = true, modifier: Modifier = Modifier) {
                         ){
                             Text(
                                 text = "SAVE REPORT  ",
-                                fontSize = 25.sp
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                             Icon(painter = downloadIcon(), contentDescription = "Download")
                         }
@@ -314,12 +327,13 @@ fun DomainIpOutput(isDomain: Boolean = true, modifier: Modifier = Modifier) {
                                 containerColor = Color(0xFFFFD691),
                                 contentColor = Color(0xFF233A66)
                             ),
-                            modifier = Modifier.padding(15.dp)
+                            modifier = Modifier.padding(12.dp)
                         ){
                             Text(
                                 text = "LOOKUP \nANOTHER",
                                 maxLines = 2,
-                                fontSize = 20.sp
+                                fontSize = 17.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                         }
                         Button(
@@ -329,12 +343,13 @@ fun DomainIpOutput(isDomain: Boolean = true, modifier: Modifier = Modifier) {
                                 containerColor = Color(0xFFFFD691),
                                 contentColor = Color(0xFF233A66)
                             ),
-                            modifier = Modifier.padding(15.dp)
+                            modifier = Modifier.padding(12.dp)
                         ){
                             Text(
                                 text = "VOIP \nLOOKUP",
                                 maxLines = 2,
-                                fontSize = 20.sp
+                                fontSize = 17.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                         }
                     }

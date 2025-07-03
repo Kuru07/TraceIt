@@ -16,8 +16,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.key.Key.Companion.R
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.ResourceFont
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 
 @Composable
 expect fun customMenuIcon(): Painter
@@ -41,20 +49,22 @@ expect fun downloadIcon():Painter
 expect fun forwardIcon(): Painter
 
 @Composable
+expect fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font
+
+
+@Composable
 fun FilledTextBox(text: String,modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFFFFD691), shape = RoundedCornerShape(15.dp))
-            .padding(16.dp)
+            .padding(start = 8.dp, top = 10.dp, bottom = 10.dp,end=0.dp)
     ) {
         Text(
             text = text,
             color = Color(0xFF233A66),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.align(Alignment.Center),
-            fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
-            fontSize = 32.sp
+            fontFamily = FontFamily.Monospace,
+            fontSize = 20.sp,
         )
     }
 
@@ -73,8 +83,8 @@ fun FilledOutputTextBox(text: String,modifier: Modifier = Modifier) {
             color = Color(0xFF233A66),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.align(Alignment.CenterStart),
-            fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
-            fontSize = 28.sp
+            fontFamily = FontFamily.Monospace,
+            fontSize = 25.sp
         )
     }
 

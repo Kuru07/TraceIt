@@ -2,7 +2,11 @@ package org.traceit.project.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import org.traceit.project.R
 
 @Composable
@@ -38,4 +42,17 @@ actual fun downloadIcon(): Painter {
 @Composable
 actual fun forwardIcon(): Painter {
     return painterResource(id = R.drawable.forward_icon)
+}
+
+@Composable
+actual fun font(
+    name: String,
+    res: String,
+    weight: FontWeight,
+    style: FontStyle
+): Font {
+    val context = LocalContext.current
+    val id = context.resources.getIdentifier(res, "font", context.packageName)
+    require(id != 0) { "Font resource not found: $res" }
+    return Font(id, weight, style)
 }

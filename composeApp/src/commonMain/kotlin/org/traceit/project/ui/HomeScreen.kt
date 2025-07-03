@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.key.Key.Companion.W
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -112,6 +113,7 @@ fun CardLayoutButton(
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color(0xFF233A66),
                 fontSize = 30.sp,
+                fontFamily = FontFamily.Serif,
                 modifier = Modifier
                     .padding(15.dp)
             )

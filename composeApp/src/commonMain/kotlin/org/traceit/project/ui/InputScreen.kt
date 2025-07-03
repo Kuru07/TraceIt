@@ -2,6 +2,8 @@ package org.traceit.project.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,6 +52,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -149,7 +153,8 @@ fun VirtualNumberInput(modifier: Modifier = Modifier) {
                         ){
                             Text(
                                 text = "TRACE NOW  ",
-                                fontSize = 25.sp
+                                fontSize = 22.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                             Icon(painter = customSearchIcon(), contentDescription = "Search")
                         }
@@ -176,7 +181,8 @@ fun VirtualNumberInput(modifier: Modifier = Modifier) {
                         ){
                             Text(
                                 text = "REPORT LOGS",
-                                fontSize = 25.sp
+                                fontSize = 22.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                         }
                     }
@@ -259,7 +265,12 @@ fun DomainIpInput(modifier: Modifier = Modifier) {
                                 focusedBorderColor = Color.White,
                                 unfocusedBorderColor = Color.White
                             ),
-                            maxLines = 1
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                fontFamily = FontFamily.Serif,
+                                fontSize = 15.sp
+                            ),
+                            modifier = Modifier
                         )
                     }
                     Spacer(modifier = Modifier.padding(5.dp))
@@ -275,7 +286,7 @@ fun DomainIpInput(modifier: Modifier = Modifier) {
                                             onClick = { onOptionSelected(text) },
                                             role = Role.RadioButton
                                         )
-                                        .padding(horizontal = 16.dp),
+                                        .padding(horizontal = 5.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     RadioButton(
@@ -301,7 +312,7 @@ fun DomainIpInput(modifier: Modifier = Modifier) {
                                     Text(
                                         text = text,
                                         style = MaterialTheme.typography.bodyLarge,
-                                        modifier = Modifier.padding(start = 16.dp)
+                                        fontFamily = FontFamily.Serif
                                     )
                                 }
                             }
@@ -330,7 +341,8 @@ fun DomainIpInput(modifier: Modifier = Modifier) {
                         ){
                             Text(
                                 text = "TRACE NOW  ",
-                                fontSize = 25.sp
+                                fontSize = 22.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                             Icon(painter = customSearchIcon(), contentDescription = "Search")
                         }
@@ -357,7 +369,8 @@ fun DomainIpInput(modifier: Modifier = Modifier) {
                         ){
                             Text(
                                 text = "REPORT LOGS",
-                                fontSize = 25.sp
+                                fontSize = 22.sp,
+                                fontFamily = FontFamily.Monospace
                             )
                         }
                     }

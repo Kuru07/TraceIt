@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
                 TraceItTheme {
-                    Home()
+                    DomainIpInput()
                 }
         }
     }

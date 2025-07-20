@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
                 TraceItTheme {
-                    DomainIpInput()
+                    App()
                 }
         }
     }
@@ -36,5 +36,5 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun AppAndroidPreview() {
-   Home()
+   App()
 }

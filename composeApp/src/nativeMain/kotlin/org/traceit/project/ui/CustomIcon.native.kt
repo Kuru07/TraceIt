@@ -50,3 +50,7 @@ actual fun font(
 ): Font {
     TODO("Not yet implemented")
 }
+
+@Composable
+actual fun HandleBackPress(onBack: () -> Unit) {
+}

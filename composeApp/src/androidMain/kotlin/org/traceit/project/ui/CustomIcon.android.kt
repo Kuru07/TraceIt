@@ -1,5 +1,6 @@
 package org.traceit.project.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
@@ -55,4 +56,11 @@ actual fun font(
     val id = context.resources.getIdentifier(res, "font", context.packageName)
     require(id != 0) { "Font resource not found: $res" }
     return Font(id, weight, style)
+}
+
+@Composable
+actual fun HandleBackPress(onBack: () -> Unit) {
+    BackHandler {
+        onBack()
+    }
 }

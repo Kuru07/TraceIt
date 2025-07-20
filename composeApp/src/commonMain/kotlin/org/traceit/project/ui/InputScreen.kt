@@ -50,140 +50,154 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.R
+import androidx.compose.ui.input.key.Key.Companion.Back
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.traceit.project.navigation.Screen
+import org.traceit.project.navigation.SimpleNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VirtualNumberInput(modifier: Modifier = Modifier) {
+fun VirtualNumberInput(
+    modifier: Modifier = Modifier,
+    navController: SimpleNavController,
+    visible : Boolean
+) {
 
     var numberInput by remember { mutableStateOf("") }
-
-    TraceItTheme {
-        Surface(
-            modifier = modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            Scaffold(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .safeContentPadding(),
-                topBar = {
-                    TopAppBar(
-                        title = {
-
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {}){
-                                Icon(
-                                    painter = customBackIcon(),
-                                    contentDescription = "Menu",
-                                    tint = Color(0xFFFFD691)
-                                )
-                            }
-                        }
-                    )
-                }
-            ) { innerPadding ->
-                Column(
+    if (visible) {
+        HandleBackPress {
+            navController.navigateBack()
+        }
+        TraceItTheme {
+            Surface(
+                modifier = modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(start = 13.dp, top = 8.dp, end = 13.dp)
-                        .verticalScroll(rememberScrollState())
-
-                ) {
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    FilledTextBox("Enter a Virtual Number")
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp),
-                        contentAlignment = Alignment.Center){
-                        Image(painter = voipLookupIcon(), contentDescription = "Voip Lookup")
-
-                    }
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                    , verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center) {
-                        OutlinedTextField(
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            value = numberInput,
-                            onValueChange = { numberInput = it },
-                            label = { },
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color.White,
-                                unfocusedBorderColor = Color.White
-                            ),
-                            prefix = {
-                                Text("+"
-                                , color = Color.White
-                                )
+                        .safeContentPadding(),
+                    topBar = {
+                        TopAppBar(
+                            title = {
                             },
-                            maxLines = 1
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    navController.navigateBack()
+                                }){
+                                    Icon(
+                                        painter = customBackIcon(),
+                                        contentDescription = "Menu",
+                                        tint = Color(0xFFFFD691)
+                                    )
+                                }
+                            }
                         )
                     }
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Row(
+                ) { innerPadding ->
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ){
-                        Button(
-                            onClick = {},
-                            shape = RoundedCornerShape(10.dp),
-                            elevation = ButtonDefaults.buttonElevation(
-                                defaultElevation = 10.dp,
-                                pressedElevation = 15.dp,
-                                hoveredElevation = 20.dp,
-                                focusedElevation = 25.dp
-                            ),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFFFD691),
-                                contentColor = Color(0xFF233A66)
-                            )
-                        ){
-                            Text(
-                                text = "TRACE NOW  ",
-                                fontSize = 22.sp,
-                                fontFamily = FontFamily.Monospace
-                            )
-                            Icon(painter = customSearchIcon(), contentDescription = "Search")
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Row(
-                        modifier = Modifier
-                            .padding(start = 30.dp,end=30.dp)
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(20.dp))
-                            .background(Color(0xFF11264F)),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(start = 13.dp, top = 8.dp, end = 13.dp)
+                            .verticalScroll(rememberScrollState())
 
                     ) {
-                        Button(
-                            onClick = {},
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFFFD691),
-                                contentColor = Color(0xFF233A66)
-                            ),
-                            modifier = Modifier.padding(15.dp)
-                        ){
-                            Text(
-                                text = "REPORT LOGS",
-                                fontSize = 22.sp,
-                                fontFamily = FontFamily.Monospace
+                        Spacer(modifier = Modifier.padding(10.dp))
+                        FilledTextBox("Enter a Virtual Number")
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                            contentAlignment = Alignment.Center){
+                            Image(painter = voipLookupIcon(), contentDescription = "Voip Lookup")
+
+                        }
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                        , verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center) {
+                            OutlinedTextField(
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                value = numberInput,
+                                onValueChange = { numberInput = it },
+                                label = { },
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = Color.White,
+                                    unfocusedBorderColor = Color.White
+                                ),
+                                prefix = {
+                                    Text("+"
+                                    , color = Color.White
+                                    )
+                                },
+                                maxLines = 1
                             )
+                        }
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ){
+                            Button(
+                                onClick = {
+                                    numberInput=""
+                                    navController.navigateTo(Screen.VoipOutput)
+                                },
+                                shape = RoundedCornerShape(10.dp),
+                                elevation = ButtonDefaults.buttonElevation(
+                                    defaultElevation = 10.dp,
+                                    pressedElevation = 15.dp,
+                                    hoveredElevation = 20.dp,
+                                    focusedElevation = 25.dp
+                                ),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFFFFD691),
+                                    contentColor = Color(0xFF233A66)
+                                )
+                            ){
+                                Text(
+                                    text = "TRACE NOW  ",
+                                    fontSize = 22.sp,
+                                    fontFamily = FontFamily.Monospace
+                                )
+                                Icon(painter = customSearchIcon(), contentDescription = "Search")
+                            }
+                        }
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Row(
+                            modifier = Modifier
+                                .padding(start = 30.dp,end=30.dp)
+                                .fillMaxWidth()
+                                .clip(shape = RoundedCornerShape(20.dp))
+                                .background(Color(0xFF11264F)),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+
+                        ) {
+                            Button(
+                                onClick = {},
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFFFFD691),
+                                    contentColor = Color(0xFF233A66)
+                                ),
+                                modifier = Modifier.padding(15.dp)
+                            ){
+                                Text(
+                                    text = "REPORT LOGS",
+                                    fontSize = 22.sp,
+                                    fontFamily = FontFamily.Monospace
+                                )
+                            }
                         }
                     }
                 }
@@ -194,184 +208,195 @@ fun VirtualNumberInput(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DomainIpInput(modifier: Modifier = Modifier) {
-    var numbertext by remember { mutableStateOf("") }
+fun DomainIpInput(
+    modifier: Modifier = Modifier,
+    navController: SimpleNavController,
+    visible : Boolean
+) {
+    var domainIpText by remember { mutableStateOf("") }
     val radioOptions = listOf("Domain", "IP Address")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
-    var isDomain by remember { mutableStateOf(true) }
+    var isDomain by remember { mutableStateOf( true ) }
 
-    TraceItTheme {
-        Surface(
-            modifier = modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            Scaffold(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .safeContentPadding(),
-                topBar = {
-                    TopAppBar(
-                        title = {
-
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {}){
-                                Icon(
-                                    painter = customBackIcon(),
-                                    contentDescription = "Menu",
-                                    tint = Color(0xFFFFD691)
-                                )
-                            }
-                        }
-                    )
-                }
-            ) { innerPadding ->
-                Column(
+    if (visible) {
+        HandleBackPress {
+            navController.navigateBack()
+        }
+        TraceItTheme {
+            Surface(
+                modifier = modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(start = 13.dp, top = 8.dp, end = 13.dp)
-                        .verticalScroll(rememberScrollState())
+                        .safeContentPadding(),
+                    topBar = {
+                        TopAppBar(
+                            title = {
 
-                ) {
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    FilledTextBox("Enter a Domain or IP")
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp),
-                        contentAlignment = Alignment.Center){
-                        Image(painter = domainLookupIcon(), contentDescription = "Domain Lookup")
-
-                    }
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        , verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center) {
-                        OutlinedTextField(
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = if(isDomain){
-                                    KeyboardType.Text
-                                }
-                                else{
-                                    KeyboardType.Number
-                                }
-                            ),
-                            value = numbertext,
-                            onValueChange = { numbertext = it },
-                            label = { },
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color.White,
-                                unfocusedBorderColor = Color.White
-                            ),
-                            singleLine = true,
-                            textStyle = TextStyle(
-                                fontFamily = FontFamily.Serif,
-                                fontSize = 15.sp
-                            ),
-                            modifier = Modifier
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(5.dp))
-                    Row{
-                        Row(modifier.selectableGroup()) {
-                            radioOptions.forEach { text ->
-                                Row(
-                                    Modifier
-                                        .wrapContentSize()
-                                        .height(56.dp)
-                                        .selectable(
-                                            selected = (text == selectedOption),
-                                            onClick = { onOptionSelected(text) },
-                                            role = Role.RadioButton
-                                        )
-                                        .padding(horizontal = 5.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    RadioButton(
-                                        selected = (text == selectedOption),
-                                        onClick = {
-                                            onOptionSelected(text)
-                                            if(text == "Domain"){
-                                                isDomain = true
-                                            }
-                                            else{
-                                                isDomain = false
-                                            }
-
-                                        },
-                                        enabled = true,
-                                        colors = RadioButtonColors(
-                                            selectedColor = Color(0xFFFFD691),
-                                            unselectedColor = Color(0xFFFFD691),
-                                            disabledSelectedColor = Color.White,
-                                            disabledUnselectedColor = Color.White
-                                        )
-                                    )
-                                    Text(
-                                        text = text,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        fontFamily = FontFamily.Serif
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    navController.navigateBack()
+                                }){
+                                    Icon(
+                                        painter = customBackIcon(),
+                                        contentDescription = "Menu",
+                                        tint = Color(0xFFFFD691)
                                     )
                                 }
                             }
-                        }
+                        )
                     }
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Row(
+                ) { innerPadding ->
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ){
-                        Button(
-                            onClick = {},
-                            shape = RoundedCornerShape(10.dp),
-                            elevation = ButtonDefaults.buttonElevation(
-                                defaultElevation = 10.dp,
-                                pressedElevation = 15.dp,
-                                hoveredElevation = 20.dp,
-                                focusedElevation = 25.dp
-                            ),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFFFD691),
-                                contentColor = Color(0xFF233A66)
-                            )
-                        ){
-                            Text(
-                                text = "TRACE NOW  ",
-                                fontSize = 22.sp,
-                                fontFamily = FontFamily.Monospace
-                            )
-                            Icon(painter = customSearchIcon(), contentDescription = "Search")
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Row(
-                        modifier = Modifier
-                            .padding(start = 30.dp,end=30.dp)
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(20.dp))
-                            .background(Color(0xFF11264F)),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(start = 13.dp, top = 8.dp, end = 13.dp)
+                            .verticalScroll(rememberScrollState())
 
                     ) {
-                        Button(
-                            onClick = {},
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFFFD691),
-                                contentColor = Color(0xFF233A66)
-                            ),
-                            modifier = Modifier.padding(15.dp)
-                        ){
-                            Text(
-                                text = "REPORT LOGS",
-                                fontSize = 22.sp,
-                                fontFamily = FontFamily.Monospace
+                        Spacer(modifier = Modifier.padding(10.dp))
+                        FilledTextBox("Enter a Domain or IP")
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                            contentAlignment = Alignment.Center){
+                            Image(painter = domainLookupIcon(), contentDescription = "Domain Lookup")
+
+                        }
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            , verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center) {
+                            OutlinedTextField(
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = if(isDomain){
+                                        KeyboardType.Text
+                                    }
+                                    else{
+                                        KeyboardType.Number
+                                    }
+                                ),
+                                value = domainIpText,
+                                onValueChange = { domainIpText = it },
+                                label = { },
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = Color.White,
+                                    unfocusedBorderColor = Color.White
+                                ),
+                                singleLine = true,
+                                textStyle = TextStyle(
+                                    fontFamily = FontFamily.Serif,
+                                    fontSize = 15.sp
+                                ),
+                                modifier = Modifier
                             )
+                        }
+                        Spacer(modifier = Modifier.padding(5.dp))
+                        Row{
+                            Row(modifier.selectableGroup()) {
+                                radioOptions.forEach { text ->
+                                    Row(
+                                        Modifier
+                                            .wrapContentSize()
+                                            .height(56.dp)
+                                            .selectable(
+                                                selected = (text == selectedOption),
+                                                onClick = {
+                                                    onOptionSelected(text)
+                                                    isDomain = text == "Domain"
+                                                },
+                                                role = Role.RadioButton
+                                            )
+                                            .padding(horizontal = 5.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        RadioButton(
+                                            selected = (text == selectedOption),
+                                            onClick = {
+                                                onOptionSelected(text)
+                                                isDomain = text == "Domain"
+                                            },
+                                            enabled = true,
+                                            colors = RadioButtonColors(
+                                                selectedColor = Color(0xFFFFD691),
+                                                unselectedColor = Color(0xFFFFD691),
+                                                disabledSelectedColor = Color.White,
+                                                disabledUnselectedColor = Color.White
+                                            )
+                                        )
+                                        Text(
+                                            text = text,
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            fontFamily = FontFamily.Serif
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ){
+                            Button(
+                                onClick = {
+                                    domainIpText=""
+                                    navController.navigateTo(Screen.DomainIpOutput( isDomain = isDomain))
+                                },
+                                shape = RoundedCornerShape(10.dp),
+                                elevation = ButtonDefaults.buttonElevation(
+                                    defaultElevation = 10.dp,
+                                    pressedElevation = 15.dp,
+                                    hoveredElevation = 20.dp,
+                                    focusedElevation = 25.dp
+                                ),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFFFFD691),
+                                    contentColor = Color(0xFF233A66)
+                                )
+                            ){
+                                Text(
+                                    text = "TRACE NOW  ",
+                                    fontSize = 22.sp,
+                                    fontFamily = FontFamily.Monospace
+                                )
+                                Icon(painter = customSearchIcon(), contentDescription = "Search")
+                            }
+                        }
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Row(
+                            modifier = Modifier
+                                .padding(start = 30.dp,end=30.dp)
+                                .fillMaxWidth()
+                                .clip(shape = RoundedCornerShape(20.dp))
+                                .background(Color(0xFF11264F)),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+
+                        ) {
+                            Button(
+                                onClick = {},
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFFFFD691),
+                                    contentColor = Color(0xFF233A66)
+                                ),
+                                modifier = Modifier.padding(15.dp)
+                            ){
+                                Text(
+                                    text = "REPORT LOGS",
+                                    fontSize = 22.sp,
+                                    fontFamily = FontFamily.Monospace
+                                )
+                            }
                         }
                     }
                 }

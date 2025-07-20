@@ -35,55 +35,67 @@ import androidx.compose.ui.input.key.Key.Companion.W
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.traceit.project.navigation.Screen
+import org.traceit.project.navigation.SimpleNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(modifier: Modifier = Modifier) {
-    TraceItTheme {
-        Surface(
-            modifier = modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            Scaffold(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .safeContentPadding(),
-                topBar = {
-                    TopAppBar(
-                        title = {
-
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {}){
-                                Icon(
-                                    painter = customMenuIcon(),
-                                    contentDescription = "Menu",
-                                    tint = Color(0xFFFFD691)
-                                )
-                            }
-                        }
-                    )
-                }
-            ) { innerPadding ->
-                Column(
+fun Home(
+    modifier: Modifier = Modifier,
+    navController: SimpleNavController,
+    visible : Boolean
+) {
+    if (visible) {
+        TraceItTheme {
+            Surface(
+                modifier = modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(start = 13.dp, top = 8.dp, end = 13.dp)
-                        .verticalScroll(rememberScrollState())
-                    ,verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CardLayoutButton(
-                        "VOIP LOOKUP", voipLookupIcon(),
-                        onClick = {  }
-                    )
-                    CardLayoutButton(
-                        "WHOIS LOOKUP",
-                        domainLookupIcon(),
-                        onClick = {}
-                    )
+                        .safeContentPadding(),
+                    topBar = {
+                        TopAppBar(
+                            title = {
 
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = {}){
+                                    Icon(
+                                        painter = customMenuIcon(),
+                                        contentDescription = "Menu",
+                                        tint = Color(0xFFFFD691)
+                                    )
+                                }
+                            }
+                        )
+                    }
+                ) { innerPadding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(start = 13.dp, top = 8.dp, end = 13.dp)
+                            .verticalScroll(rememberScrollState())
+                        ,verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CardLayoutButton(
+                            "VOIP LOOKUP", voipLookupIcon(),
+                            onClick = {
+                                navController.navigateTo(Screen.VoipInput)
+                            }
+                        )
+                        CardLayoutButton(
+                            "WHOIS LOOKUP",
+                            domainLookupIcon(),
+                            onClick = {
+                                navController.navigateTo(Screen.DomainIpInput)
+                            }
+                        )
+
+                    }
                 }
             }
         }

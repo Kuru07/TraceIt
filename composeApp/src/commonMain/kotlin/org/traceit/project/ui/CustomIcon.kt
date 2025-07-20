@@ -51,6 +51,9 @@ expect fun forwardIcon(): Painter
 @Composable
 expect fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font
 
+@Composable
+expect fun HandleBackPress( onBack: () -> Unit)
+
 
 @Composable
 fun FilledTextBox(text: String,modifier: Modifier = Modifier) {

@@ -2,8 +2,6 @@ package org.traceit.project.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,18 +12,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,45 +31,83 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.Back
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import org.traceit.project.navigation.Screen
 import org.traceit.project.navigation.SimpleNavController
+import org.traceit.project.networking.ipvalidation.IpClient
+import org.traceit.project.networking.ipvalidation.IpResponse
+import org.traceit.project.networking.phonevalidation.PhoneClient
+import org.traceit.project.networking.phonevalidation.TwilioClient
+import org.traceit.project.networking.phonevalidation.TwilioResponse
+import org.traceit.project.networking.phonevalidation.VoipResponse
+import org.traceit.project.networking.whoislookup.WhoIsClient
+import org.traceit.project.networking.whoislookup.WhoIsResponse
+import org.traceit.project.util.NetworkError
+import org.traceit.project.util.onError
+import org.traceit.project.util.onSuccess
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VirtualNumberInput(
     modifier: Modifier = Modifier,
     navController: SimpleNavController,
-    visible : Boolean
+    visible : Boolean,
+    client: PhoneClient,
+    twilioClient: TwilioClient
 ) {
 
     var numberInput by remember { mutableStateOf("") }
     if (visible) {
+        var isLoading by remember {
+            mutableStateOf(false)
+        }
+
+        var errorMessage by remember {
+            mutableStateOf< NetworkError?>(null)
+        }
+
+        var notValidPhone by remember {
+            mutableStateOf("")
+        }
+
+        val scope = rememberCoroutineScope()
+
+        val scope2 = rememberCoroutineScope()
+
+        var voipResponse by remember {
+            mutableStateOf<VoipResponse?>(null)
+        }
+        var twilioResponse by remember {
+            mutableStateOf<TwilioResponse?>(null)
+        }
         HandleBackPress {
             navController.navigateBack()
+            errorMessage=null
+            notValidPhone=""
+            numberInput=""
         }
         TraceItTheme {
+
             Surface(
                 modifier = modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
@@ -89,6 +123,9 @@ fun VirtualNumberInput(
                             navigationIcon = {
                                 IconButton(onClick = {
                                     navController.navigateBack()
+                                    errorMessage=null
+                                    notValidPhone=""
+                                    numberInput=""
                                 }){
                                     Icon(
                                         painter = customBackIcon(),
@@ -149,8 +186,55 @@ fun VirtualNumberInput(
                         ){
                             Button(
                                 onClick = {
-                                    numberInput=""
-                                    navController.navigateTo(Screen.VoipOutput)
+                                    val number = numberInput.filter {
+                                        it.isDigit()
+                                    }
+                                    try {
+                                        if (isValidPhoneNumber(number)) {
+                                            scope.launch {
+                                                notValidPhone = ""
+                                                isLoading = true
+                                                errorMessage = null
+
+                                                client.getPhoneValidation(number)
+                                                    .onSuccess { currentVoipResponse ->
+                                                        voipResponse = currentVoipResponse
+                                                        //navController.navigateTo(Screen.VoipOutput(voipResponse))
+                                                        scope2.launch {
+                                                            twilioClient.getPhoneValidation("+$number")
+                                                                .onSuccess {
+                                                                    twilioResponse = it
+                                                                    navController.navigateTo(
+                                                                        Screen.VoipOutput(
+                                                                            voipResponse,
+                                                                            twilioResponse
+                                                                        )
+                                                                    )
+                                                                    errorMessage = null
+                                                                    notValidPhone = ""
+                                                                    numberInput = ""
+                                                                    isLoading = false
+                                                                }
+                                                                .onError {
+                                                                    errorMessage = it
+                                                                    isLoading = false
+                                                                }
+                                                        }
+                                                    }
+                                                    .onError {
+                                                        errorMessage = it
+                                                        isLoading = false
+                                                    }
+                                            }
+                                        } else {
+                                            println("VirtualNumberInput: Invalid or empty input received: '$numberInput'")
+                                            notValidPhone = "Enter a Valid Number"
+                                        }
+                                    }
+                                    catch (e: Exception){
+                                        notValidPhone=e.message.toString()
+                                    }
+
                                 },
                                 shape = RoundedCornerShape(10.dp),
                                 elevation = ButtonDefaults.buttonElevation(
@@ -171,6 +255,46 @@ fun VirtualNumberInput(
                                 )
                                 Icon(painter = customSearchIcon(), contentDescription = "Search")
                             }
+                        }
+
+                        Spacer(modifier = Modifier.padding(10.dp))
+                        if(isLoading){
+                            Row(modifier = Modifier
+                                .safeContentPadding()
+                                .fillMaxWidth(),
+                                Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                                Spacer(modifier = Modifier.padding(10.dp))
+                                Text("Please Wait...",
+                                    color = Color.White,
+                                    fontSize = 17.sp,
+                                    fontFamily = FontFamily.Monospace,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+
+                        if(notValidPhone.isNotEmpty()){
+                            Text(
+                                text = notValidPhone,
+                                color = Color.Red,
+                                fontSize = 18.sp,
+                                fontFamily = FontFamily.Monospace,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                                )
+                        }
+
+                        errorMessage?.let {
+                            Text(
+                                text = it.name,
+                                color = Color.Red,
+                                fontSize = 18.sp,
+                                fontFamily = FontFamily.Monospace,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
                         }
                         Spacer(modifier = Modifier.padding(20.dp))
                         Row(
@@ -211,16 +335,42 @@ fun VirtualNumberInput(
 fun DomainIpInput(
     modifier: Modifier = Modifier,
     navController: SimpleNavController,
-    visible : Boolean
+    visible : Boolean,
+    IPclient: IpClient,
+    whoIsClient: WhoIsClient
 ) {
     var domainIpText by remember { mutableStateOf("") }
     val radioOptions = listOf("Domain", "IP Address")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
     var isDomain by remember { mutableStateOf( true ) }
 
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
+
+    var errorMessage by remember {
+        mutableStateOf< NetworkError?>(null)
+    }
+
+    val scope = rememberCoroutineScope()
+
+    var ipResponse by remember {
+        mutableStateOf<IpResponse?>(null)
+    }
+
+    var whoIsResponse by remember {
+        mutableStateOf<WhoIsResponse?>(null)
+    }
+
+    var privateIp  by remember {
+        mutableStateOf("")
+    }
     if (visible) {
         HandleBackPress {
             navController.navigateBack()
+            errorMessage=null
+            domainIpText=""
+            privateIp=""
         }
         TraceItTheme {
             Surface(
@@ -239,6 +389,9 @@ fun DomainIpInput(
                             navigationIcon = {
                                 IconButton(onClick = {
                                     navController.navigateBack()
+                                    errorMessage=null
+                                    domainIpText=""
+                                    privateIp=""
                                 }){
                                     Icon(
                                         painter = customBackIcon(),
@@ -310,6 +463,8 @@ fun DomainIpInput(
                                                 onClick = {
                                                     onOptionSelected(text)
                                                     isDomain = text == "Domain"
+                                                    privateIp=""
+                                                    domainIpText=""
                                                 },
                                                 role = Role.RadioButton
                                             )
@@ -321,6 +476,8 @@ fun DomainIpInput(
                                             onClick = {
                                                 onOptionSelected(text)
                                                 isDomain = text == "Domain"
+                                                privateIp=""
+                                                domainIpText=""
                                             },
                                             enabled = true,
                                             colors = RadioButtonColors(
@@ -348,8 +505,71 @@ fun DomainIpInput(
                         ){
                             Button(
                                 onClick = {
-                                    domainIpText=""
-                                    navController.navigateTo(Screen.DomainIpOutput( isDomain = isDomain))
+                                    var ipAddress = domainIpText
+                                    try {
+                                        if(!isDomain){
+                                            scope.launch{
+                                                isLoading =  true
+                                                errorMessage = null
+
+                                                IPclient.getIpValidation(ipAddress)
+                                                    .onSuccess {
+                                                        ipResponse = it
+                                                        if(ipResponse?.status != "fail"){
+                                                            navController.navigateTo(Screen.DomainIpOutput( isDomain = isDomain ,ipResponse))
+                                                            privateIp=""
+                                                            errorMessage=null
+                                                            domainIpText=""
+                                                        }
+                                                        else
+                                                            privateIp="Its a private Ip Address"
+                                                        domainIpText=""
+                                                        isLoading=false
+                                                    }
+                                                    .onError {
+                                                        errorMessage = it
+                                                        isLoading = false
+                                                    }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            println("IpAddressInput: Invalid or empty input received: '$domainIpText'")
+                                        }
+                                        var domainText = domainIpText
+                                        if(isDomain){
+                                            scope.launch{
+                                                isLoading =  true
+                                                errorMessage = null
+
+                                                whoIsClient.getWhoIsValidation(domainText)
+                                                    .onSuccess {
+                                                        whoIsResponse = it
+                                                        if(whoIsResponse?.status == true){
+                                                            navController.navigateTo(Screen.DomainIpOutput( isDomain = isDomain , whoIsResponse = whoIsResponse))
+                                                            privateIp=""
+                                                            errorMessage=null
+                                                            domainIpText=""
+                                                        }
+                                                        else
+                                                            privateIp="Enter the domain correctly"
+                                                        domainIpText=""
+                                                        isLoading=false
+                                                    }
+                                                    .onError {
+                                                        errorMessage = it
+                                                        isLoading = false
+                                                    }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            println("DomainInput: Invalid or empty input received: '$domainIpText'")
+
+                                        }
+                                    } catch (e: Exception) {
+                                        errorMessage=NetworkError.REQUEST_TIMEOUT
+                                    }
                                 },
                                 shape = RoundedCornerShape(10.dp),
                                 elevation = ButtonDefaults.buttonElevation(
@@ -370,6 +590,43 @@ fun DomainIpInput(
                                 )
                                 Icon(painter = customSearchIcon(), contentDescription = "Search")
                             }
+                        }
+                        Spacer(modifier = Modifier.padding(10.dp))
+                        if(isLoading){
+                            Row(modifier = Modifier
+                                .safeContentPadding()
+                                .fillMaxWidth(),
+                                Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                                Spacer(modifier = Modifier.padding(10.dp))
+                                Text("Please Wait...",
+                                    color = Color.White,
+                                    fontSize = 17.sp,
+                                    fontFamily = FontFamily.Monospace,
+                                    textAlign = TextAlign.Center,
+                                )
+                            }
+                        }
+                        if(privateIp.isNotEmpty()){
+                            Text(
+                                text = privateIp,
+                                color = Color.Red,
+                                fontSize = 18.sp,
+                                fontFamily = FontFamily.Monospace,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        errorMessage?.let {
+                            Text(
+                                text = it.name,
+                                color = Color.Red,
+                                fontSize = 18.sp,
+                                fontFamily = FontFamily.Monospace,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
                         }
                         Spacer(modifier = Modifier.padding(20.dp))
                         Row(
@@ -403,4 +660,10 @@ fun DomainIpInput(
             }
         }
     }
+}
+
+
+fun isValidPhoneNumber(input: String): Boolean {
+    val trimmed = input.trim()
+    return trimmed.length in 8..15 && trimmed.all { it.isDigit() }
 }

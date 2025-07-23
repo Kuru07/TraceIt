@@ -1,0 +1,18 @@
+package org.traceit.project.util
+
+enum class NetworkError: Error {
+    REQUEST_TIMEOUT,
+    UNAUTHORIZED,
+    CONFLICT,
+    TOO_MANY_REQUESTS,
+    NO_INTERNET,
+    PAYLOAD_TOO_LARGE,
+    SERVER_ERROR,
+    SERIALIZATION,
+    QUOTA_EXCEEDED,
+    BAD_REQUEST,
+    PARTIAL_RESPONSE,
+    CACHED_RESPONSE,
+    UNAVAILABLE_DOMAIN_EXTENSION,
+    UNKNOWN;
+}
